@@ -68,6 +68,7 @@ Every time I solve a new problem on LeetCode, LeetSync automatically creates a n
 <tr><td>11</td><td><a href="11-container-with-most-water/">Container With Most Water</a></td><td>Medium</td><td>Java</td></tr>
 <tr><td>76</td><td><a href="76-minimum-window-substring/">Minimum Window Substring</a></td><td>Hard</td><td>Java</td></tr>
 <tr><td>125</td><td><a href="125-valid-palindrome/">Valid Palindrome</a></td><td>Easy</td><td>Java</td></tr>
+<tr><td>485</td><td><a href="485-max-consecutive-ones/">Max Consecutive Ones</a></td><td>Easy</td><td>Unknown</td></tr>
 </table>
 <!-- LEETCODE_TABLE_END -->
 
