@@ -20,8 +20,11 @@ import sys
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 README_PATH = os.path.join(REPO_ROOT, "README.md")
 
-START_MARKER = "<!-- LEETCODE_TABLE_START -->"
-END_MARKER = "<!-- LEETCODE_TABLE_END -->"
+DSA_START_MARKER = "<!-- DSA_TABLE_START -->"
+DSA_END_MARKER = "<!-- DSA_TABLE_END -->"
+
+SQL_START_MARKER = "<!-- SQL_TABLE_START -->"
+SQL_END_MARKER = "<!-- SQL_TABLE_END -->"
 
 # Folder name pattern LeetSync uses: "11-container-with-most-water"
 FOLDER_PATTERN = re.compile(r"^(\d+)-(.+)$")
@@ -39,7 +42,11 @@ LANGUAGE_MAP = {
     ".cs": "C#",
     ".kt": "Kotlin",
     ".swift": "Swift",
+    ".sql": "SQL",
 }
+
+# Extensions that count as "SQL" category for table grouping purposes
+SQL_EXTENSIONS = {".sql"}
 
 # Folders that are NOT LeetCode problem folders and should be skipped
 SKIP_FOLDERS = {"Classwork", "Assignments", "LeetCode", ".git", ".github"}
@@ -67,14 +74,16 @@ def extract_title_and_difficulty(problem_readme_path):
 
 def find_solution_language(folder_path):
     """Find the solution file in a problem folder (anything that isn't
-    README.md) and map its extension to a display language."""
+    README.md) and map its extension to a display language, plus a
+    coarse category ("SQL" or "DSA") used to split the summary tables."""
     for filename in os.listdir(folder_path):
         if filename == "README.md":
             continue
         ext = os.path.splitext(filename)[1].lower()
         if ext in LANGUAGE_MAP:
-            return LANGUAGE_MAP[ext]
-    return "Unknown"
+            category = "SQL" if ext in SQL_EXTENSIONS else "DSA"
+            return LANGUAGE_MAP[ext], category
+    return "Unknown", "DSA"
 
 
 def collect_problems():
@@ -99,7 +108,7 @@ def collect_problems():
             continue
 
         title, url, difficulty = extract_title_and_difficulty(readme_path)
-        language = find_solution_language(full_path)
+        language, category = find_solution_language(full_path)
 
         problems.append({
             "number": problem_number,
@@ -107,6 +116,7 @@ def collect_problems():
             "url": url,
             "difficulty": difficulty,
             "language": language,
+            "category": category,
             "folder": entry,
         })
 
@@ -114,16 +124,18 @@ def collect_problems():
     return problems
 
 
-def build_table(problems):
-    if not problems:
-        return "<p><i>No solved problems found yet.</i></p>"
+def build_table_for_category(problems, category):
+    filtered = [p for p in problems if p["category"] == category]
+
+    if not filtered:
+        return "<p><i>No problems solved in this category yet.</i></p>"
 
     rows = [
         "<table>",
         "<tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Language</th></tr>",
     ]
 
-    for p in problems:
+    for p in filtered:
         rows.append(
             f'<tr><td>{p["number"]}</td>'
             f'<td><a href="{p["folder"]}/">{p["title"]}</a></td>'
@@ -135,45 +147,49 @@ def build_table(problems):
     return "\n".join(rows)
 
 
-def update_readme(table_html):
-    with open(README_PATH, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    if START_MARKER not in content or END_MARKER not in content:
+def replace_section(content, start_marker, end_marker, table_html):
+    if start_marker not in content or end_marker not in content:
         print(
-            "ERROR: Could not find LEETCODE_TABLE_START / "
-            "LEETCODE_TABLE_END markers in README.md.\n"
-            "Add these two lines around your table section first:\n"
-            f"  {START_MARKER}\n  ...\n  {END_MARKER}"
+            f"ERROR: Could not find {start_marker} / {end_marker} "
+            "markers in README.md."
         )
         sys.exit(1)
 
     pattern = re.compile(
-        re.escape(START_MARKER) + r".*?" + re.escape(END_MARKER),
+        re.escape(start_marker) + r".*?" + re.escape(end_marker),
         re.DOTALL,
     )
+    replacement = f"{start_marker}\n{table_html}\n{end_marker}"
+    return pattern.sub(replacement, content)
 
-    replacement = f"{START_MARKER}\n{table_html}\n{END_MARKER}"
-    new_content = pattern.sub(replacement, content)
 
-    if new_content == content:
-        print("No changes needed - table is already up to date.")
+def update_readme(dsa_table_html, sql_table_html):
+    with open(README_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    original = content
+    content = replace_section(content, DSA_START_MARKER, DSA_END_MARKER, dsa_table_html)
+    content = replace_section(content, SQL_START_MARKER, SQL_END_MARKER, sql_table_html)
+
+    if content == original:
+        print("No changes needed - tables are already up to date.")
         return False
 
     with open(README_PATH, "w", encoding="utf-8") as f:
-        f.write(new_content)
+        f.write(content)
 
-    print(f"README.md updated with {len(problems)} problem(s).")
+    print("README.md updated.")
     return True
 
 
 if __name__ == "__main__":
     problems = collect_problems()
-    table_html = build_table(problems)
-    changed = update_readme(table_html)
+    dsa_table_html = build_table_for_category(problems, "DSA")
+    sql_table_html = build_table_for_category(problems, "SQL")
+    changed = update_readme(dsa_table_html, sql_table_html)
 
     if changed:
         print("Done. Review the changes, then commit and push:")
         print("  git add README.md")
-        print('  git commit -m "docs: update LeetCode problems table"')
+        print('  git commit -m "docs: update problem tables"')
         print("  git push")
