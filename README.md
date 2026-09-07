@@ -83,6 +83,7 @@ Every time I solve a new problem on LeetCode, LeetSync automatically creates a n
 <tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Language</th></tr>
 <tr><td>584</td><td><a href="584-find-customer-referee/">Find Customer Referee</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>595</td><td><a href="595-big-countries/">Big Countries</a></td><td>Easy</td><td>SQL</td></tr>
+<tr><td>1258</td><td><a href="1258-article-views-i/">Article Views I</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1908</td><td><a href="1908-recyclable-and-low-fat-products/">Recyclable and Low Fat Products</a></td><td>Easy</td><td>SQL</td></tr>
 </table>
 <!-- SQL_TABLE_END -->
