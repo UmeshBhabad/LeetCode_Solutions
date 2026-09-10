@@ -86,6 +86,7 @@ Every time I solve a new problem on LeetCode, LeetSync automatically creates a n
 <tr><td>595</td><td><a href="595-big-countries/">Big Countries</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1153</td><td><a href="1153-product-sales-analysis-i/">Product Sales Analysis I</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1258</td><td><a href="1258-article-views-i/">Article Views I</a></td><td>Easy</td><td>SQL</td></tr>
+<tr><td>1390</td><td><a href="1390-average-selling-price/">Average Selling Price</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1509</td><td><a href="1509-replace-employee-id-with-the-unique-identifier/">Replace Employee ID With The Unique Identifier</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1724</td><td><a href="1724-customer-who-visited-but-did-not-make-any-transactions/">Customer Who Visited but Did Not Make Any Transactions</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1827</td><td><a href="1827-invalid-tweets/">Invalid Tweets</a></td><td>Easy</td><td>SQL</td></tr>
