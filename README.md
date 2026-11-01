@@ -93,6 +93,7 @@ Every time I solve a new problem on LeetCode, LeetSync automatically creates a n
 <tr><td>1773</td><td><a href="1773-percentage-of-users-attended-a-contest/">Percentage of Users Attended a Contest</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1827</td><td><a href="1827-invalid-tweets/">Invalid Tweets</a></td><td>Easy</td><td>SQL</td></tr>
 <tr><td>1908</td><td><a href="1908-recyclable-and-low-fat-products/">Recyclable and Low Fat Products</a></td><td>Easy</td><td>SQL</td></tr>
+<tr><td>2127</td><td><a href="2127-employees-whose-manager-left-the-company/">Employees Whose Manager Left the Company</a></td><td>Easy</td><td>SQL</td></tr>
 </table>
 <!-- SQL_TABLE_END -->
 
